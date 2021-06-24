@@ -1,6 +1,6 @@
 import Note from './Note';
 import AddNote from './AddNote';
-const NotesList = ({ notes, handleAddNote, handleDeleteNote, handleEditNote }) => {
+const NotesList = ({ notes, handleAddNote, handleDeleteNote, handleEditNote, handleSelectNote }) => {
     return(
         <div className="notes-list">
             {
@@ -11,6 +11,8 @@ const NotesList = ({ notes, handleAddNote, handleDeleteNote, handleEditNote }) =
                         date={note.date}
                         handleDeleteNote={handleDeleteNote}
                         handleEditNote={handleEditNote}
+                        handleSelectNote={handleSelectNote}
+                        selected={note.selected}
                     />
                 )
             }

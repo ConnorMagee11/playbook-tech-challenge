@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MdDeleteForever, MdEdit } from 'react-icons/md';
 
-const Note = ({ id, text, date, handleDeleteNote, handleEditNote }) => {
+const Note = ({ id, text, date, handleDeleteNote, handleEditNote, handleSelectNote, selected }) => {
     const [isEdit, setIsEdit] = useState(false);
     const [noteText, setNoteText] = useState(text);
     const charLimit = 255;
@@ -13,12 +13,26 @@ const Note = ({ id, text, date, handleDeleteNote, handleEditNote }) => {
     }
 
     const handleUpdateClick = (event) => {
+        event.stopPropagation();
         handleEditNote(id, noteText);
         setIsEdit(false);
     }
 
     const handleEditClick = (event) => {
+        event.stopPropagation();
+        setNoteText(text);
         setIsEdit(true);
+    }
+
+    const handleDeleteClick = (event) => {
+        event.stopPropagation();
+        handleDeleteNote(id)
+    }
+
+    const handleSelect = (event) => {
+        if(isEdit === false){
+            handleSelectNote(id);
+        }
     }
 
     if(isEdit){
@@ -39,13 +53,13 @@ const Note = ({ id, text, date, handleDeleteNote, handleEditNote }) => {
         )
     } else {
         return(
-            <div className="note">
+            <div className={selected ? 'note selected' : 'note'} onClick={handleSelect}>
                 <span className="note-text">{text}</span>
                 <div className="note-footer">
                     <small>{date}</small>
                     <div className='footer-icons'>
                         <MdEdit className='edit-icon' size='1.3em' onClick={handleEditClick}/>
-                        <MdDeleteForever className='delete-icon' size='1.3em' onClick={() => handleDeleteNote(id)}/>
+                        <MdDeleteForever className='delete-icon' size='1.3em' onClick={handleDeleteClick}/>
                     </div> 
                 </div>
             </div>

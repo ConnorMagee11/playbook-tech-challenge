@@ -3,23 +3,9 @@ import { nanoid } from 'nanoid';
 import NotesList from './components/NotesList';
 
 const App = () => {
-  const [notes, setNotes] = useState([
-      {
-        id: nanoid(),
-        text: "test note text",
-        date: "06/21/2021"
-      },
-      {
-        id: nanoid(),
-        text: "test note text",
-        date: "06/21/2021"
-      },
-      {
-        id: nanoid(),
-        text: "test note text",
-        date: "06/21/2021"
-      }
-  ]);
+  const [notes, setNotes] = useState([]);
+
+  const [selectedNote1, setSelectedNote1] = useState(0);
 
   const addnote = (text) => {
     const date = new Date();
@@ -43,9 +29,43 @@ const App = () => {
     setNotes(newNotes);
   };
 
+  const selectnote = (id) => {
+    if(selectedNote1 === id){
+      const newNotes = [...notes];
+      newNotes[newNotes.findIndex(x => x.id === selectedNote1)].selected = false;
+      setNotes(newNotes);
+      setSelectedNote1(0);
+    }
+    
+    if(selectedNote1 !== 0){
+      const newNotes = [...notes];
+      var note1idx = newNotes.findIndex(x => x.id === selectedNote1);
+      var note2idx = newNotes.findIndex(x => x.id === id);
+      var temp = newNotes[note2idx];
+      newNotes[note2idx] = newNotes[note1idx];
+      newNotes[note1idx] = temp;
+      newNotes.map(note => note.selected = false);
+      setNotes(newNotes);
+      setSelectedNote1(0);
+    }
+
+    if(selectedNote1 === 0){
+      const newNotes = [...notes];
+      newNotes[newNotes.findIndex(x => x.id === id)].selected = true;
+      setNotes(newNotes);
+      setSelectedNote1(id);
+    }
+  };
+
   return(
     <div className='container'>
-      <NotesList notes={notes} handleAddNote={addnote} handleDeleteNote={deletenote} handleEditNote={editnote}/>
+      <NotesList
+        notes={notes}
+        handleAddNote={addnote}
+        handleDeleteNote={deletenote}
+        handleEditNote={editnote}
+        handleSelectNote={selectnote}
+      />
     </div>
   );
 }
